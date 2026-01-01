@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -66,6 +67,12 @@ function Login() {
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        <div className="auth-divider">
+          <span>or</span>
+        </div>
+
+        <GoogleSignInButton />
 
         <p className="auth-footer">
           Don't have an account? <Link to="/register">Register here</Link>

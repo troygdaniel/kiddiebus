@@ -3,6 +3,9 @@ from flask_jwt_extended import (
     create_access_token, create_refresh_token,
     jwt_required, get_jwt_identity
 )
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+import os
 from app import db
 from app.models import User
 
@@ -125,3 +128,61 @@ def update_current_user():
         'message': 'Profile updated successfully',
         'user': user.to_dict()
     }), 200
+
+
+@auth_bp.route('/google', methods=['POST'])
+def google_auth():
+    data = request.get_json()
+
+    if 'credential' not in data:
+        return jsonify({'error': 'Google credential is required'}), 400
+
+    try:
+        # Verify the Google token
+        idinfo = id_token.verify_oauth2_token(
+            data['credential'],
+            google_requests.Request(),
+            os.environ.get('GOOGLE_CLIENT_ID')
+        )
+
+        google_id = idinfo['sub']
+        email = idinfo['email']
+        first_name = idinfo.get('given_name', '')
+        last_name = idinfo.get('family_name', '')
+
+        # Check if user exists by google_id or email
+        user = User.query.filter_by(google_id=google_id).first()
+
+        if not user:
+            user = User.query.filter_by(email=email).first()
+            if user:
+                # Link existing account to Google
+                user.google_id = google_id
+            else:
+                # Create new user
+                user = User(
+                    email=email,
+                    google_id=google_id,
+                    first_name=first_name or 'User',
+                    last_name=last_name or '',
+                    role='parent'  # Default role for new Google users
+                )
+                db.session.add(user)
+
+        db.session.commit()
+
+        if not user.is_active:
+            return jsonify({'error': 'Account is deactivated'}), 403
+
+        access_token = create_access_token(identity=user.id)
+        refresh_token = create_refresh_token(identity=user.id)
+
+        return jsonify({
+            'message': 'Google login successful',
+            'user': user.to_dict(),
+            'access_token': access_token,
+            'refresh_token': refresh_token
+        }), 200
+
+    except ValueError:
+        return jsonify({'error': 'Invalid Google token'}), 401

@@ -7,7 +7,8 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=True)  # Nullable for OAuth users
+    google_id = db.Column(db.String(255), unique=True, nullable=True, index=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     phone = db.Column(db.String(20))
@@ -25,6 +26,8 @@ class User(db.Model):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password):
+        if not self.password_hash:
+            return False
         return bcrypt.check_password_hash(self.password_hash, password)
 
     def to_dict(self):

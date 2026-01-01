@@ -304,6 +304,34 @@ body {
   text-decoration: none;
 }
 
+.auth-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.auth-divider span {
+  padding: 0 1rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.google-signin-wrapper {
+  margin-bottom: 1rem;
+}
+
+.google-signin-button {
+  display: flex;
+  justify-content: center;
+}
+
 /* Alerts */
 .alert {
   padding: 0.875rem 1rem;

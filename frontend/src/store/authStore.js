@@ -44,6 +44,17 @@ const useAuthStore = create((set, get) => ({
     return user;
   },
 
+  loginWithGoogle: async (credential) => {
+    const response = await authAPI.googleLogin(credential);
+    const { user, access_token, refresh_token } = response.data;
+
+    localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
+
+    set({ user, isAuthenticated: true });
+    return user;
+  },
+
   logout: () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');

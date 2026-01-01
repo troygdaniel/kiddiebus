@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -151,6 +152,12 @@ function Register() {
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
+
+        <div className="auth-divider">
+          <span>or</span>
+        </div>
+
+        <GoogleSignInButton />
 
         <p className="auth-footer">
           Already have an account? <Link to="/login">Sign in here</Link>

@@ -59,6 +59,7 @@ api.interceptors.response.use(
 export const authAPI = {
   login: (email, password) => api.post('/auth/login', { email, password }),
   register: (userData) => api.post('/auth/register', userData),
+  googleLogin: (credential) => api.post('/auth/google', { credential }),
   getMe: () => api.get('/auth/me'),
   updateMe: (data) => api.put('/auth/me', data),
   refresh: () => api.post('/auth/refresh'),
