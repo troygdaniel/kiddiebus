@@ -1132,11 +1132,127 @@ body {
   }
 }
 
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(20, 184, 166, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(20, 184, 166, 0.5); }
+}
+
+@keyframes borderGlow {
+  0%, 100% { border-color: var(--border-color); }
+  50% { border-color: var(--primary-color); }
+}
+
+/* Scroll-triggered animation classes */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-delay-1 { transition-delay: 0.1s; }
+.animate-delay-2 { transition-delay: 0.2s; }
+.animate-delay-3 { transition-delay: 0.3s; }
+.animate-delay-4 { transition-delay: 0.4s; }
+.animate-delay-5 { transition-delay: 0.5s; }
+
 /* Landing Page - Modern Dark Theme */
 .landing-page {
   min-height: 100vh;
   background: var(--background);
   color: var(--text-primary);
+  overflow-x: hidden;
 }
 
 .landing-nav {
@@ -1146,6 +1262,7 @@ body {
   padding: 1.5rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  animation: fadeInDown 0.6s ease-out;
 }
 
 .landing-logo {
@@ -1155,11 +1272,30 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.landing-logo:hover {
+  transform: scale(1.05);
 }
 
 .landing-nav-links {
   display: flex;
   gap: 1rem;
+}
+
+.landing-nav-links .btn {
+  animation: fadeIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.landing-nav-links .btn:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.landing-nav-links .btn:nth-child(2) {
+  animation-delay: 0.3s;
 }
 
 .hero {
@@ -1202,6 +1338,7 @@ body {
   font-size: 0.875rem;
   color: var(--primary-light);
   margin-bottom: 2rem;
+  animation: fadeInUp 0.6s ease-out 0.2s both, borderGlow 3s ease-in-out infinite;
 }
 
 .hero h1 {
@@ -1210,13 +1347,16 @@ body {
   line-height: 1.1;
   font-weight: 700;
   letter-spacing: -0.02em;
+  animation: fadeInUp 0.7s ease-out 0.3s both;
 }
 
 .hero h1 .highlight {
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #14b8a6, #06b6d4, #8b5cf6, #14b8a6);
+  background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: gradientShift 4s ease infinite;
 }
 
 .hero p {
@@ -1226,12 +1366,30 @@ body {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  animation: fadeInUp 0.7s ease-out 0.4s both;
 }
 
 .hero-buttons {
   display: flex;
   gap: 1rem;
   justify-content: center;
+  animation: fadeInUp 0.7s ease-out 0.5s both;
+}
+
+.hero-buttons .btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-buttons .btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 3s infinite;
 }
 
 .hero-stats {
@@ -1241,21 +1399,38 @@ body {
   margin-top: 4rem;
   padding-top: 3rem;
   border-top: 1px solid var(--border-color);
+  animation: fadeIn 0.8s ease-out 0.7s both;
 }
 
 .hero-stat {
   text-align: center;
+  animation: fadeInUp 0.6s ease-out both;
 }
+
+.hero-stat:nth-child(1) { animation-delay: 0.8s; }
+.hero-stat:nth-child(2) { animation-delay: 0.9s; }
+.hero-stat:nth-child(3) { animation-delay: 1.0s; }
 
 .hero-stat-value {
   font-size: 2rem;
   font-weight: 700;
   color: var(--primary-color);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.hero-stat:hover .hero-stat-value {
+  transform: scale(1.1);
+  color: var(--primary-light);
 }
 
 .hero-stat-label {
   font-size: 0.875rem;
   color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.hero-stat:hover .hero-stat-label {
+  color: var(--text-primary);
 }
 
 .how-it-works,
@@ -1278,6 +1453,12 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.section-badge:hover {
+  background: rgba(139, 92, 246, 0.2);
+  transform: scale(1.05);
 }
 
 .how-it-works h2,
@@ -1333,6 +1514,12 @@ body {
   font-weight: 700;
   margin: 0 auto 1.5rem;
   box-shadow: 0 0 30px rgba(20, 184, 166, 0.3);
+  transition: all 0.3s ease;
+}
+
+.step:hover .step-number {
+  animation: glowPulse 1.5s ease-in-out infinite;
+  transform: scale(1.1);
 }
 
 .step h3 {
@@ -1380,6 +1567,12 @@ body {
 .benefit-icon {
   font-size: 3rem;
   margin-bottom: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.benefit-card:hover .benefit-icon {
+  transform: scale(1.2);
+  animation: float 2s ease-in-out infinite;
 }
 
 .benefit-card h3 {
@@ -1412,6 +1605,21 @@ body {
   background: var(--primary-color);
   border-radius: 50%;
   box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
+  transition: all 0.3s ease;
+}
+
+.benefit-card li:hover::before {
+  transform: translateY(-50%) scale(1.5);
+  box-shadow: 0 0 20px rgba(20, 184, 166, 0.8);
+}
+
+.benefit-card li {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.benefit-card li:hover {
+  transform: translateX(5px);
+  color: var(--text-primary);
 }
 
 .features-grid {
@@ -1445,6 +1653,13 @@ body {
   justify-content: center;
   margin-bottom: 1rem;
   font-size: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.feature:hover .feature-icon {
+  background: rgba(20, 184, 166, 0.2);
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
 }
 
 .feature h4 {
@@ -1467,22 +1682,46 @@ body {
   max-width: none;
   background-image:
     radial-gradient(ellipse at 50% 50%, rgba(20, 184, 166, 0.1) 0%, transparent 70%);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.05) 0%, transparent 50%);
+  animation: pulse 8s ease-in-out infinite;
 }
 
 .cta-section h2 {
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .cta-section p {
   color: var(--text-secondary);
   margin-bottom: 2.5rem;
   font-size: 1.125rem;
+  position: relative;
 }
 
 .cta-buttons {
   display: flex;
   gap: 1rem;
   justify-content: center;
+  position: relative;
+}
+
+.cta-buttons .btn-primary {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.cta-buttons .btn-primary:hover {
+  animation: none;
 }
 
 .landing-footer {
