@@ -19,6 +19,16 @@ def create_app(config_name='default'):
 
     # Initialize extensions
     db.init_app(app)
+
+    # Debug middleware to log auth headers
+    @app.before_request
+    def log_request_info():
+        from flask import request
+        auth_header = request.headers.get('Authorization', 'NONE')
+        if auth_header != 'NONE':
+            token_preview = auth_header[:50] if len(auth_header) > 50 else auth_header
+            segments = auth_header.replace('Bearer ', '').split('.') if auth_header.startswith('Bearer ') else []
+            print(f"[AUTH DEBUG] Path: {request.path}, Auth header segments: {len(segments)}, Preview: {token_preview}")
     migrate.init_app(app, db)
     jwt.init_app(app)
     bcrypt.init_app(app)
