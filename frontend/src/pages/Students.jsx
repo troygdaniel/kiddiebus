@@ -67,10 +67,23 @@ function Students() {
 
       {students.length === 0 ? (
         <div className="empty-state">
-          <h3>No {isOperator() ? 'students' : 'children'} found</h3>
-          <p>{isOperator() ? 'Students will appear here when parents register them.' : 'Add your children to start tracking their bus.'}</p>
-          {!isOperator() && (
-            <Link to="/my-children/add" className="btn btn-primary">Add Child</Link>
+          {isOperator() ? (
+            <>
+              <h3>No students found</h3>
+              <p>Students will appear here when parents register them.</p>
+            </>
+          ) : (
+            <>
+              <div className="empty-icon">👨‍👩‍👧‍👦</div>
+              <h3>Welcome to Kiddie Bus!</h3>
+              <p>Add your children to start tracking their school bus and receive real-time updates.</p>
+              <div className="benefits-list">
+                <span>✓ Real-time bus tracking</span>
+                <span>✓ Instant delay notifications</span>
+                <span>✓ Boarding confirmations</span>
+              </div>
+              <Link to="/my-children/add" className="btn btn-primary btn-large">Add Your First Child</Link>
+            </>
           )}
         </div>
       ) : (

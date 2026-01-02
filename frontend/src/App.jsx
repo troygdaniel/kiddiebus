@@ -16,6 +16,7 @@ import RouteForm from './pages/RouteForm';
 import Buses from './pages/Buses';
 import Students from './pages/Students';
 import StudentForm from './pages/StudentForm';
+import AddChild from './pages/AddChild';
 import CheckIn from './pages/CheckIn';
 import Messages from './pages/Messages';
 import SendNotification from './pages/SendNotification';
@@ -168,7 +169,7 @@ function App() {
             path="my-children/add"
             element={
               <ProtectedRoute allowedRoles={['parent']}>
-                <StudentForm />
+                <AddChild />
               </ProtectedRoute>
             }
           />
