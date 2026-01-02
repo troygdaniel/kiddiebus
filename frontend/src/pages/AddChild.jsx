@@ -9,8 +9,6 @@ function AddChild() {
   const [error, setError] = useState('');
   const [createdChild, setCreatedChild] = useState(null);
 
-  console.log('[AddChild] Component rendered!');
-
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
