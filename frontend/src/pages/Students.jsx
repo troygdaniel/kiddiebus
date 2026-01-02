@@ -4,11 +4,15 @@ import { studentsAPI, routesAPI } from '../services/api';
 import useAuthStore from '../store/authStore';
 
 function Students() {
-  const { isOperator } = useAuthStore();
+  const { isOperator, user } = useAuthStore();
   const [students, setStudents] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filterRoute, setFilterRoute] = useState('');
+
+  console.log('[Students] Rendering - user:', user);
+  console.log('[Students] isOperator():', isOperator());
+  console.log('[Students] user.role:', user?.role);
 
   useEffect(() => {
     loadData();
@@ -49,7 +53,11 @@ function Students() {
     <div className="page-container">
       <header className="page-header">
         <h1>{isOperator() ? 'Students' : 'My Children'}</h1>
-        <Link to={isOperator() ? '/dashboard/students/new' : '/dashboard/my-children/add'} className="btn btn-primary">
+        <Link
+          to={isOperator() ? '/dashboard/students/new' : '/dashboard/my-children/add'}
+          className="btn btn-primary"
+          onClick={() => console.log('[Students] Add button clicked! Navigating to:', isOperator() ? '/dashboard/students/new' : '/dashboard/my-children/add')}
+        >
           Add {isOperator() ? 'Student' : 'Child'}
         </Link>
       </header>
