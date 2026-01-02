@@ -26,9 +26,15 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const requestUrl = originalRequest?.url || '';
 
-    // Handle both 401 (unauthorized) and 422 (malformed token) errors
-    if ((error.response?.status === 401 || error.response?.status === 422) && !originalRequest._retry) {
+    // Skip token refresh logic for auth endpoints (login, register, google)
+    const isAuthEndpoint = requestUrl.includes('/auth/login') ||
+                           requestUrl.includes('/auth/register') ||
+                           requestUrl.includes('/auth/google');
+
+    // Handle 401 (unauthorized) and 422 (malformed token) errors, but not for auth endpoints
+    if (!isAuthEndpoint && (error.response?.status === 401 || error.response?.status === 422) && !originalRequest._retry) {
       originalRequest._retry = true;
 
       const refreshToken = localStorage.getItem('refresh_token');
@@ -49,6 +55,10 @@ api.interceptors.response.use(
           window.location.href = '/login';
           return Promise.reject(refreshError);
         }
+      } else {
+        // No refresh token, clear and redirect
+        localStorage.removeItem('access_token');
+        window.location.href = '/login';
       }
     }
 
