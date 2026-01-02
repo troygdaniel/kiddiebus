@@ -65,17 +65,17 @@ function Dashboard() {
             <div className="stat-card">
               <h3>{stats.routes}</h3>
               <p>Active Routes</p>
-              <Link to="/routes">View Routes</Link>
+              <Link to="/dashboard/routes">View Routes</Link>
             </div>
             <div className="stat-card">
               <h3>{stats.students}</h3>
               <p>Students</p>
-              <Link to="/students">View Students</Link>
+              <Link to="/dashboard/students">View Students</Link>
             </div>
             <div className="stat-card">
               <h3>{stats.buses}</h3>
               <p>Active Buses</p>
-              <Link to="/buses">View Buses</Link>
+              <Link to="/dashboard/buses">View Buses</Link>
             </div>
           </>
         ) : (
@@ -83,19 +83,19 @@ function Dashboard() {
             <div className="stat-card">
               <h3>{stats.students}</h3>
               <p>My Children</p>
-              <Link to="/my-children">View Children</Link>
+              <Link to="/dashboard/my-children">View Children</Link>
             </div>
             <div className="stat-card">
               <h3>Track</h3>
               <p>Bus Location</p>
-              <Link to="/track">Track Now</Link>
+              <Link to="/dashboard/track">Track Now</Link>
             </div>
           </>
         )}
         <div className="stat-card">
           <h3>{unreadCount}</h3>
           <p>Unread Messages</p>
-          <Link to="/messages">View Messages</Link>
+          <Link to="/dashboard/messages">View Messages</Link>
         </div>
       </section>
 
@@ -105,14 +105,14 @@ function Dashboard() {
         <div className="action-buttons">
           {isOperator() ? (
             <>
-              <Link to="/routes/new" className="btn btn-primary">Add Route</Link>
-              <Link to="/checkin" className="btn btn-secondary">Student Check-In</Link>
-              <Link to="/messages/new" className="btn btn-secondary">Send Notification</Link>
+              <Link to="/dashboard/routes/new" className="btn btn-primary">Add Route</Link>
+              <Link to="/dashboard/checkin" className="btn btn-secondary">Student Check-In</Link>
+              <Link to="/dashboard/messages/new" className="btn btn-secondary">Send Notification</Link>
             </>
           ) : (
             <>
-              <Link to="/track" className="btn btn-primary">Track My Child's Bus</Link>
-              <Link to="/my-children/add" className="btn btn-secondary">Add Child</Link>
+              <Link to="/dashboard/track" className="btn btn-primary">Track My Child's Bus</Link>
+              <Link to="/dashboard/my-children/add" className="btn btn-secondary">Add Child</Link>
             </>
           )}
         </div>
@@ -141,7 +141,7 @@ function Dashboard() {
         ) : (
           <p className="no-data">No notifications yet</p>
         )}
-        <Link to="/messages" className="view-all-link">View All Messages</Link>
+        <Link to="/dashboard/messages" className="view-all-link">View All Messages</Link>
       </section>
     </div>
   );
