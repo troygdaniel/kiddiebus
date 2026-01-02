@@ -46,16 +46,10 @@ const useAuthStore = create((set, get) => ({
 
   loginWithGoogle: async (credential) => {
     const response = await authAPI.googleLogin(credential);
-    console.log('Google login response:', response.data);
     const { user, access_token, refresh_token } = response.data;
-    console.log('Access token (first 50 chars):', access_token?.substring(0, 50));
-    console.log('Token segments:', access_token?.split('.').length);
 
     localStorage.setItem('access_token', access_token);
     localStorage.setItem('refresh_token', refresh_token);
-
-    // Verify it was saved correctly
-    console.log('Saved token (first 50 chars):', localStorage.getItem('access_token')?.substring(0, 50));
 
     set({ user, isAuthenticated: true });
     return user;
