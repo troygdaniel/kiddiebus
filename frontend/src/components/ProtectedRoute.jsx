@@ -19,7 +19,8 @@ function ProtectedRoute({ children, allowedRoles }) {
   }
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {
-    return <Navigate to="/" replace />;
+    console.warn(`Access denied: User role '${user?.role}' not in allowed roles:`, allowedRoles);
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
