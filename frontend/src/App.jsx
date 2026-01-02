@@ -9,7 +9,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 // Pages
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
-import Register from './pages/Register';
+import RegisterChoice from './pages/RegisterChoice';
+import RegisterParent from './pages/RegisterParent';
+import RegisterOperator from './pages/RegisterOperator';
 import Dashboard from './pages/Dashboard';
 import RoutesPage from './pages/Routes';
 import RouteForm from './pages/RouteForm';
@@ -57,7 +59,15 @@ function App() {
         />
         <Route
           path="/register"
-          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Register />}
+          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterChoice />}
+        />
+        <Route
+          path="/register/parent"
+          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterParent />}
+        />
+        <Route
+          path="/register/operator"
+          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterOperator />}
         />
 
         {/* Protected Routes */}

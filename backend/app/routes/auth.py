@@ -37,6 +37,7 @@ def register():
         first_name=data['first_name'],
         last_name=data['last_name'],
         phone=data.get('phone'),
+        company_name=data.get('company_name'),
         role=data['role']
     )
     user.set_password(data['password'])

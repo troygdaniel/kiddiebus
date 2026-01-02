@@ -49,7 +49,7 @@ function Students() {
     <div className="page-container">
       <header className="page-header">
         <h1>{isOperator() ? 'Students' : 'My Children'}</h1>
-        <Link to={isOperator() ? '/students/new' : '/my-children/add'} className="btn btn-primary">
+        <Link to={isOperator() ? '/dashboard/students/new' : '/dashboard/my-children/add'} className="btn btn-primary">
           Add {isOperator() ? 'Student' : 'Child'}
         </Link>
       </header>
@@ -82,7 +82,7 @@ function Students() {
                 <span>✓ Instant delay notifications</span>
                 <span>✓ Boarding confirmations</span>
               </div>
-              <Link to="/my-children/add" className="btn btn-primary btn-large">Add Your First Child</Link>
+              <Link to="/dashboard/my-children/add" className="btn btn-primary btn-large">Add Your First Child</Link>
             </>
           )}
         </div>

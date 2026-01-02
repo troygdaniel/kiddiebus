@@ -79,7 +79,7 @@ function AddChild() {
           </div>
 
           <div className="success-actions">
-            <button onClick={() => navigate('/my-children')} className="btn btn-primary btn-large">
+            <button onClick={() => navigate('/dashboard/my-children')} className="btn btn-primary btn-large">
               View My Children
             </button>
             <button
@@ -198,7 +198,7 @@ function AddChild() {
               </div>
 
               <div className="form-actions">
-                <button type="button" onClick={() => navigate('/my-children')} className="btn btn-secondary">
+                <button type="button" onClick={() => navigate('/dashboard/my-children')} className="btn btn-secondary">
                   Cancel
                 </button>
                 <button type="button" onClick={handleNext} className="btn btn-primary">
