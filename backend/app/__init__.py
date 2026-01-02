@@ -9,6 +9,27 @@ from config import config
 db = SQLAlchemy()
 migrate = Migrate()
 jwt = JWTManager()
+
+
+# JWT error handlers for better debugging
+@jwt.invalid_token_loader
+def invalid_token_callback(error_string):
+    print(f"[JWT ERROR] Invalid token: {error_string}")
+    return {'error': f'Invalid token: {error_string}'}, 422
+
+
+@jwt.unauthorized_loader
+def unauthorized_callback(error_string):
+    print(f"[JWT ERROR] Unauthorized: {error_string}")
+    return {'error': f'Unauthorized: {error_string}'}, 401
+
+
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header, jwt_payload):
+    print(f"[JWT ERROR] Token expired. Header: {jwt_header}, Payload: {jwt_payload}")
+    return {'error': 'Token has expired'}, 401
+
+
 bcrypt = Bcrypt()
 
 
