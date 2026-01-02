@@ -8,14 +8,14 @@ notifications_bp = Blueprint('notifications', __name__)
 
 def require_operator_or_admin():
     current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
+    user = User.query.get(int(current_user_id))
     return user and user.role in ['admin', 'operator']
 
 
 @notifications_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_notifications():
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
 
     # Get filter params
     unread_only = request.args.get('unread_only', 'false').lower() == 'true'
@@ -47,7 +47,7 @@ def get_notifications():
 @notifications_bp.route('/<int:notification_id>', methods=['GET'])
 @jwt_required()
 def get_notification(notification_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
 
     notification = Notification.query.get(notification_id)
     if not notification:
@@ -66,7 +66,7 @@ def create_notification():
     if not require_operator_or_admin():
         return jsonify({'error': 'Unauthorized'}), 403
 
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     data = request.get_json()
 
     # Validate required fields
@@ -102,7 +102,7 @@ def broadcast_notification():
     if not require_operator_or_admin():
         return jsonify({'error': 'Unauthorized'}), 403
 
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     data = request.get_json()
 
     if 'title' not in data or 'message' not in data:
@@ -152,7 +152,7 @@ def broadcast_notification():
 @notifications_bp.route('/<int:notification_id>/read', methods=['PUT'])
 @jwt_required()
 def mark_as_read(notification_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
 
     notification = Notification.query.get(notification_id)
     if not notification:
@@ -173,7 +173,7 @@ def mark_as_read(notification_id):
 @notifications_bp.route('/read-all', methods=['PUT'])
 @jwt_required()
 def mark_all_as_read():
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
 
     Notification.query.filter_by(
         recipient_id=current_user_id,
@@ -188,7 +188,7 @@ def mark_all_as_read():
 @notifications_bp.route('/<int:notification_id>', methods=['DELETE'])
 @jwt_required()
 def delete_notification(notification_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
 
     notification = Notification.query.get(notification_id)
     if not notification:

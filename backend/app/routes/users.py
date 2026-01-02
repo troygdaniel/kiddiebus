@@ -8,13 +8,13 @@ users_bp = Blueprint('users', __name__)
 
 def require_admin():
     current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
+    user = User.query.get(int(current_user_id))
     return user and user.role == 'admin'
 
 
 def require_operator_or_admin():
     current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
+    user = User.query.get(int(current_user_id))
     return user and user.role in ['admin', 'operator']
 
 
@@ -37,7 +37,7 @@ def get_users():
 @users_bp.route('/<int:user_id>', methods=['GET'])
 @jwt_required()
 def get_user(user_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     current_user = User.query.get(current_user_id)
 
     # Users can view their own profile, operators/admins can view anyone

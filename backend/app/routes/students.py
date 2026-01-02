@@ -9,14 +9,14 @@ students_bp = Blueprint('students', __name__)
 
 def require_operator_or_admin():
     current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
+    user = User.query.get(int(current_user_id))
     return user and user.role in ['admin', 'operator']
 
 
 @students_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_students():
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     current_user = User.query.get(current_user_id)
 
     query = Student.query.filter_by(is_active=True)
@@ -37,7 +37,7 @@ def get_students():
 @students_bp.route('/<int:student_id>', methods=['GET'])
 @jwt_required()
 def get_student(student_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     current_user = User.query.get(current_user_id)
 
     student = Student.query.get(student_id)
@@ -54,7 +54,7 @@ def get_student(student_id):
 @students_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_student():
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     current_user = User.query.get(current_user_id)
 
     data = request.get_json()
@@ -108,7 +108,7 @@ def create_student():
 @students_bp.route('/<int:student_id>', methods=['PUT'])
 @jwt_required()
 def update_student(student_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     current_user = User.query.get(current_user_id)
 
     student = Student.query.get(student_id)
@@ -161,7 +161,7 @@ def update_student(student_id):
 @students_bp.route('/<int:student_id>', methods=['DELETE'])
 @jwt_required()
 def delete_student(student_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     current_user = User.query.get(current_user_id)
 
     student = Student.query.get(student_id)
@@ -198,7 +198,7 @@ def checkin_student(student_id):
     if not require_operator_or_admin():
         return jsonify({'error': 'Unauthorized'}), 403
 
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
 
     student = Student.query.get(student_id)
     if not student:
@@ -233,7 +233,7 @@ def checkin_student(student_id):
 @students_bp.route('/<int:student_id>/boardings', methods=['GET'])
 @jwt_required()
 def get_student_boardings(student_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     current_user = User.query.get(current_user_id)
 
     student = Student.query.get(student_id)

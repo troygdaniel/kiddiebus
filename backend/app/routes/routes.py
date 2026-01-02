@@ -9,14 +9,14 @@ routes_bp = Blueprint('routes', __name__)
 
 def require_operator_or_admin():
     current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
+    user = User.query.get(int(current_user_id))
     return user and user.role in ['admin', 'operator']
 
 
 @routes_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_routes():
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     current_user = User.query.get(current_user_id)
 
     query = Route.query
@@ -55,7 +55,7 @@ def create_route():
     if not require_operator_or_admin():
         return jsonify({'error': 'Unauthorized'}), 403
 
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     data = request.get_json()
 
     if 'name' not in data:

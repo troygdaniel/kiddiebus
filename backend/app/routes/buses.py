@@ -9,7 +9,7 @@ buses_bp = Blueprint('buses', __name__)
 
 def require_operator_or_admin():
     current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
+    user = User.query.get(int(current_user_id))
     return user and user.role in ['admin', 'operator']
 
 
