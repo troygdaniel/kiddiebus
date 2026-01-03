@@ -116,6 +116,17 @@ export const studentsAPI = {
   getBoardings: (id) => api.get(`/students/${id}/boardings`),
 };
 
+// Schools API
+export const schoolsAPI = {
+  getAll: () => api.get('/schools'),
+  getAllForDropdown: () => api.get('/schools/all'),
+  getById: (id) => api.get(`/schools/${id}`),
+  create: (data) => api.post('/schools', data),
+  update: (id, data) => api.put(`/schools/${id}`, data),
+  delete: (id) => api.delete(`/schools/${id}`),
+  getStudents: (id) => api.get(`/schools/${id}/students`),
+};
+
 // Notifications API
 export const notificationsAPI = {
   getAll: (params) => api.get('/notifications', { params }),

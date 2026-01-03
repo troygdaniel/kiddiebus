@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { studentsAPI, routesAPI, usersAPI } from '../services/api';
+import { studentsAPI, routesAPI, usersAPI, schoolsAPI } from '../services/api';
 import useAuthStore from '../store/authStore';
 
 function StudentForm() {
@@ -11,11 +11,13 @@ function StudentForm() {
 
   const [routes, setRoutes] = useState([]);
   const [parents, setParents] = useState([]);
+  const [schools, setSchools] = useState([]);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     date_of_birth: '',
     grade: '',
+    school_id: '',
     school_name: '',
     parent_id: '',
     route_id: '',
@@ -34,10 +36,12 @@ function StudentForm() {
 
   const loadFormData = async () => {
     try {
-      const [routesRes] = await Promise.all([
+      const [routesRes, schoolsRes] = await Promise.all([
         routesAPI.getAll({ status: 'active' }),
+        schoolsAPI.getAllForDropdown(),
       ]);
       setRoutes(routesRes.data.routes);
+      setSchools(schoolsRes.data.schools);
 
       if (isOperator()) {
         const parentsRes = await usersAPI.getAll('parent');
@@ -57,6 +61,7 @@ function StudentForm() {
         last_name: student.last_name || '',
         date_of_birth: student.date_of_birth || '',
         grade: student.grade || '',
+        school_id: student.school_id || '',
         school_name: student.school_name || '',
         parent_id: student.parent_id || '',
         route_id: student.route_id || '',
@@ -81,6 +86,7 @@ function StudentForm() {
     try {
       const data = {
         ...formData,
+        school_id: formData.school_id || null,
         route_id: formData.route_id || null,
         parent_id: formData.parent_id || null,
       };
@@ -163,15 +169,18 @@ function StudentForm() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="school_name">School Name</label>
-          <input
-            type="text"
-            id="school_name"
-            name="school_name"
-            value={formData.school_name}
+          <label htmlFor="school_id">School</label>
+          <select
+            id="school_id"
+            name="school_id"
+            value={formData.school_id}
             onChange={handleChange}
-            placeholder="Name of school"
-          />
+          >
+            <option value="">Select school</option>
+            {schools.map((school) => (
+              <option key={school.id} value={school.id}>{school.name}</option>
+            ))}
+          </select>
         </div>
 
         {isOperator() && (

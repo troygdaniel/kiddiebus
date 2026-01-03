@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { studentsAPI } from '../services/api';
+import { studentsAPI, schoolsAPI } from '../services/api';
 
 function AddChild() {
   const navigate = useNavigate();
@@ -8,16 +8,30 @@ function AddChild() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [createdChild, setCreatedChild] = useState(null);
+  const [schools, setSchools] = useState([]);
 
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     date_of_birth: '',
     grade: '',
-    school_name: '',
+    school_id: '',
     pickup_address: '',
     dropoff_address: '',
   });
+
+  useEffect(() => {
+    loadSchools();
+  }, []);
+
+  const loadSchools = async () => {
+    try {
+      const response = await schoolsAPI.getAllForDropdown();
+      setSchools(response.data.schools);
+    } catch (error) {
+      console.error('Error loading schools:', error);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -90,7 +104,7 @@ function AddChild() {
                   last_name: '',
                   date_of_birth: '',
                   grade: '',
-                  school_name: '',
+                  school_id: '',
                   pickup_address: '',
                   dropoff_address: '',
                 });
@@ -186,15 +200,18 @@ function AddChild() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="school_name">School Name</label>
-                <input
-                  type="text"
-                  id="school_name"
-                  name="school_name"
-                  value={formData.school_name}
+                <label htmlFor="school_id">School</label>
+                <select
+                  id="school_id"
+                  name="school_id"
+                  value={formData.school_id}
                   onChange={handleChange}
-                  placeholder="Which school does your child attend?"
-                />
+                >
+                  <option value="">Select school</option>
+                  {schools.map((school) => (
+                    <option key={school.id} value={school.id}>{school.name}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="form-actions">

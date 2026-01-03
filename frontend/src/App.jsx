@@ -16,6 +16,7 @@ import Dashboard from './pages/Dashboard';
 import RoutesPage from './pages/Routes';
 import RouteForm from './pages/RouteForm';
 import Buses from './pages/Buses';
+import Schools from './pages/Schools';
 import Students from './pages/Students';
 import StudentForm from './pages/StudentForm';
 import AddChild from './pages/AddChild';
@@ -120,6 +121,15 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['operator', 'admin']}>
                 <Buses />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="schools"
+            element={
+              <ProtectedRoute allowedRoles={['operator', 'admin']}>
+                <Schools />
               </ProtectedRoute>
             }
           />

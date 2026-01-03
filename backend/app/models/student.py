@@ -14,6 +14,7 @@ class Student(db.Model):
     school_name = db.Column(db.String(100))
     parent_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     route_id = db.Column(db.Integer, db.ForeignKey('routes.id'), nullable=True)
+    school_id = db.Column(db.Integer, db.ForeignKey('schools.id'), nullable=True)
     card_id = db.Column(db.String(50), unique=True)  # For card/fob check-in
     pickup_address = db.Column(db.String(200))
     pickup_latitude = db.Column(db.Float)
@@ -40,7 +41,8 @@ class Student(db.Model):
             'full_name': f'{self.first_name} {self.last_name}',
             'date_of_birth': self.date_of_birth.isoformat() if self.date_of_birth else None,
             'grade': self.grade,
-            'school_name': self.school_name,
+            'school_name': self.school.name if self.school else self.school_name,
+            'school_id': self.school_id,
             'parent_id': self.parent_id,
             'route_id': self.route_id,
             'card_id': self.card_id,

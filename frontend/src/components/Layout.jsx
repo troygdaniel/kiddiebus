@@ -30,6 +30,7 @@ function Layout() {
             <>
               <Link to="/dashboard/routes" className="nav-link">My Routes</Link>
               <Link to="/dashboard/buses" className="nav-link">Buses</Link>
+              <Link to="/dashboard/schools" className="nav-link">Schools</Link>
               <Link to="/dashboard/students" className="nav-link">Students</Link>
               <Link to="/dashboard/checkin" className="nav-link">Check-In</Link>
             </>

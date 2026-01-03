@@ -31,6 +31,7 @@ def create_app(config_name='default'):
     from app.routes.routes import routes_bp
     from app.routes.students import students_bp
     from app.routes.notifications import notifications_bp
+    from app.routes.schools import schools_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(users_bp, url_prefix='/api/users')
@@ -38,6 +39,7 @@ def create_app(config_name='default'):
     app.register_blueprint(routes_bp, url_prefix='/api/routes')
     app.register_blueprint(students_bp, url_prefix='/api/students')
     app.register_blueprint(notifications_bp, url_prefix='/api/notifications')
+    app.register_blueprint(schools_bp, url_prefix='/api/schools')
 
     # Health check route
     @app.route('/api/health')

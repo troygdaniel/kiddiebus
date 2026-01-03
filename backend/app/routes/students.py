@@ -76,6 +76,7 @@ def create_student():
         last_name=data['last_name'],
         grade=data.get('grade'),
         school_name=data.get('school_name'),
+        school_id=data.get('school_id'),
         parent_id=parent_id,
         route_id=data.get('route_id'),
         pickup_address=data.get('pickup_address'),
@@ -129,6 +130,8 @@ def update_student(student_id):
         student.grade = data['grade']
     if 'school_name' in data:
         student.school_name = data['school_name']
+    if 'school_id' in data:
+        student.school_id = data['school_id']
     if 'route_id' in data:
         student.route_id = data['route_id']
     if 'pickup_address' in data:
