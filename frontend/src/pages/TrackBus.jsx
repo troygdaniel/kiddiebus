@@ -1,15 +1,41 @@
 import { useEffect, useState } from 'react';
-import { studentsAPI, routesAPI } from '../services/api';
+import { studentsAPI, routesAPI, busesAPI } from '../services/api';
+import MapComponent from '../components/MapComponent';
 
 function TrackBus() {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [route, setRoute] = useState(null);
+  const [bus, setBus] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
     loadStudents();
   }, []);
+
+  // Poll for bus location updates every 30 seconds
+  useEffect(() => {
+    if (!route?.bus?.id) return;
+
+    const pollLocation = async () => {
+      try {
+        const response = await busesAPI.getById(route.bus.id);
+        setBus(response.data.bus);
+        setLastUpdated(new Date());
+      } catch (error) {
+        console.error('Error polling bus location:', error);
+      }
+    };
+
+    // Initial fetch
+    pollLocation();
+
+    // Set up polling interval
+    const interval = setInterval(pollLocation, 30000);
+
+    return () => clearInterval(interval);
+  }, [route?.bus?.id]);
 
   const loadStudents = async () => {
     try {
@@ -31,12 +57,17 @@ function TrackBus() {
       try {
         const response = await routesAPI.getById(student.route_id);
         setRoute(response.data.route);
+        if (response.data.route.bus) {
+          setBus(response.data.route.bus);
+        }
       } catch (error) {
         console.error('Error loading route:', error);
         setRoute(null);
+        setBus(null);
       }
     } else {
       setRoute(null);
+      setBus(null);
     }
   };
 
@@ -58,10 +89,17 @@ function TrackBus() {
     );
   }
 
+  const hasLocation = bus?.current_location?.latitude && bus?.current_location?.longitude;
+
   return (
     <div className="page-container">
       <header className="page-header">
         <h1>Track Bus</h1>
+        {lastUpdated && (
+          <span className="last-updated">
+            Last updated: {lastUpdated.toLocaleTimeString()}
+          </span>
+        )}
       </header>
 
       {students.length > 1 && (
@@ -84,13 +122,27 @@ function TrackBus() {
       )}
 
       <div className="tracking-container">
-        {/* Map Placeholder */}
+        {/* Map */}
         <div className="map-container">
-          <div className="map-placeholder">
-            <h3>Bus Location Map</h3>
-            <p>Google Maps integration will be enabled in Phase 2</p>
-            <p>Real-time bus tracking coming soon!</p>
-          </div>
+          {hasLocation ? (
+            <MapComponent
+              buses={bus ? [bus] : []}
+              center={hasLocation ? {
+                lat: bus.current_location.latitude,
+                lng: bus.current_location.longitude
+              } : undefined}
+              zoom={15}
+            />
+          ) : (
+            <div className="map-placeholder">
+              <h3>Waiting for Bus Location</h3>
+              {route ? (
+                <p>The bus hasn't reported its location yet. Updates will appear automatically.</p>
+              ) : (
+                <p>No route assigned. Contact your bus operator.</p>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Route Info */}
@@ -117,38 +169,30 @@ function TrackBus() {
                       : 'Not set'}
                   </span>
                 </div>
-                <div className="info-row">
-                  <span className="label">Days:</span>
-                  <span className="value">
-                    {route.days_of_week?.length > 0
-                      ? route.days_of_week.map(d => d.charAt(0).toUpperCase() + d.slice(1)).join(', ')
-                      : 'Not set'}
-                  </span>
-                </div>
               </div>
 
-              {route.bus && (
+              {bus && (
                 <div className="info-card">
                   <h3>Bus Details</h3>
                   <div className="info-row">
                     <span className="label">Registration:</span>
-                    <span className="value">{route.bus.registration_number}</span>
+                    <span className="value">{bus.registration_number}</span>
                   </div>
                   <div className="info-row">
                     <span className="label">Vehicle:</span>
-                    <span className="value">{route.bus.make} {route.bus.model}</span>
+                    <span className="value">{bus.make} {bus.model}</span>
                   </div>
                   <div className="info-row">
                     <span className="label">Status:</span>
-                    <span className={`status-badge status-${route.bus.status}`}>
-                      {route.bus.status}
+                    <span className={`status-badge status-${bus.status}`}>
+                      {bus.status}
                     </span>
                   </div>
-                  {route.bus.current_location && (
+                  {bus.current_location?.updated_at && (
                     <div className="info-row">
-                      <span className="label">Last Updated:</span>
+                      <span className="label">Location Update:</span>
                       <span className="value">
-                        {new Date(route.bus.current_location.updated_at).toLocaleString()}
+                        {new Date(bus.current_location.updated_at).toLocaleString()}
                       </span>
                     </div>
                   )}
